@@ -33,26 +33,26 @@ namespace LSI.Controllers
         }
 
         [HttpGet]
-        [Route("/exports/selectableusers")]
-        public IEnumerable<string> GetSelectableUsers()
+        [Route("/exports/selectablelocals")]
+        public IEnumerable<string> GetSelectablelocals()
         {
-            List<string> users;
+            List<string> locals;
             using (var db = new LSIDBContext())
             {
-                users = db.Exports.Select(e=>e.UserName).ToList();
+                locals = db.Exports.Select(e=>e.LocalName).ToList();
             }
-            return users;
+            return locals;
         }
 
         [HttpGet]
         [Route("/exports/")]
-        public IEnumerable<ExportDTO> GetExports([FromQuery] string username, [FromQuery] DateTime datefrom, [FromQuery] DateTime dateto)
+        public IEnumerable<ExportDTO> GetExports([FromQuery] string localname, [FromQuery] DateTime datefrom, [FromQuery] DateTime dateto)
         {
             Console.WriteLine(DateTime.Now);
             List<ExportDTO> exports = null;
             using (var db = new LSIDBContext())
             {
-                var dbexports = db.Exports.Where(x => x.Date > datefrom).Where(x => x.Date < dateto).Where(x => x.UserName == username);
+                var dbexports = db.Exports.Where(x => x.Date > datefrom).Where(x => x.Date < dateto).Where(x => x.LocalName == localname);
 
                 exports = dbexports.Select(x => new ExportDTO()
                 {
