@@ -1,5 +1,6 @@
 ﻿using LSI.DB;
 using LSI.DBModels;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -52,7 +53,7 @@ namespace LSI.Controllers
             List<ExportDTO> exports = null;
             using (var db = new LSIDBContext())
             {
-                var dbexports = db.Exports.Where(x => x.Date > datefrom).Where(x => x.Date < dateto).Where(x => x.LocalName == localname);
+                var dbexports = db.Exports.Where(x => x.Date > datefrom).Where(x => x.Date < dateto).Where(x => x.LocalName == localname); 
 
                 exports = dbexports.Select(x => new ExportDTO()
                 {

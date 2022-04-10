@@ -26,7 +26,14 @@ namespace LSI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddCors(options => 
+            {
+                options.AddPolicy("LSIPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                }
+                );
+            });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -47,6 +54,8 @@ namespace LSI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("LSIPolicy");
 
             app.UseAuthorization();
 
