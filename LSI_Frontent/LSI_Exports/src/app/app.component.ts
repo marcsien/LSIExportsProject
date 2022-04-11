@@ -4,6 +4,9 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import { MatInput } from '@angular/material/input';
 import { GetApiService } from './get-api.service';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import { MatTableDataSource } from '@angular/material/table';
+import { DataTableComponent } from './data-table/data-table.component';
+
 
 
 interface Local {
@@ -11,7 +14,7 @@ interface Local {
   viewValue: string;
 }
 
-export interface ExportElement {
+interface ExportElement {
   name: string;
   date: Date;
   time: Time;
@@ -20,7 +23,7 @@ export interface ExportElement {
 }
 
 const ELEMENT_DATA: ExportElement[] = [
-  //{ name: 'tst', date: new Date('2021-01-01'), time: {hours: 5, minutes: 10}, username: 'testuser', localname: 'testlocal'},
+  { name: 'tst', date: new Date('2021-01-01'), time: {hours: 5, minutes: 10}, username: 'testuser', localname: 'testlocal'},
 ];
 
 @Component({
@@ -34,16 +37,20 @@ export class AppComponent {
   selectedfromdate?: string = '';
   selectedtodate?: string = '';
   events: string[] = [];
-  dataSource: ExportElement[] = ELEMENT_DATA;
+  locals: Local[] = [];
+  //dataSource: ExportElement[] = [];
+  dataSource1!: MatTableDataSource<ExportElement[]>;
+  appdatatable: DataTableComponent = new DataTableComponent();
 
   constructor(private api:GetApiService) 
   {
-
+      
   } 
 
   ngOnInit() {
     this.refreshLocals();
     this.fillall();
+    //this.appdatatable.ngAfterViewInit()
   }
 
   refreshLocals() {
@@ -54,9 +61,7 @@ export class AppComponent {
     })
   }
 
-  locals: Local[] = [
-    {value: 'Local1', viewValue: 'Local1'},
-  ];
+ 
 
   public ok() {
     this.api.getExports(this.selectedLocal, this.selectedfromdate || '', this.selectedtodate || '').subscribe((data) => {     
@@ -68,8 +73,12 @@ export class AppComponent {
 
   public fillall() {
     this.api.getAllExports().subscribe((data) => {
-      Object.entries(data).forEach(element => {console.log (element[1])})
+      Object.entries(data).forEach(element => {
+        this.appdatatable.dataSource.data.push({ name: element[1].name, date: new Date(element[1].date), time: {hours: 0, minutes: 0}, username: element[1].username, localname: element[1].localname})
+      })
     })
+
+
   }
 
   public todatechanged(event: MatDatepickerInputEvent<Date>) {

@@ -18,12 +18,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 
 import { HttpClientModule } from '@angular/common/http';
-
+import { DataTableComponent } from './data-table/data-table.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DataTableComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +39,9 @@ import { HttpClientModule } from '@angular/common/http';
     MatSelectModule,
     MatGridListModule,
     MatTableModule,
-    HttpClientModule
+    HttpClientModule,
+    MatPaginatorModule,
+    MatSortModule
 
   ],
   providers: [],
